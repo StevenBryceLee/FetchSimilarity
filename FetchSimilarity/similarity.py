@@ -1,5 +1,4 @@
 from fastapi import APIRouter, File
-import pandas as pd
 import numpy as np
 from nltk.corpus import stopwords
 import nltk
