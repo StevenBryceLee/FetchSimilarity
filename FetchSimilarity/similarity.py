@@ -5,11 +5,16 @@ import nltk
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.metrics.pairwise import cosine_similarity
+from typing import List, Dict
 
 router = APIRouter()
 
-@router.post('/similarity')
-async def testSimilarity(first: str, second: str):
+np.random.seed(42)
+
+nltk.download('stopwords')
+
+@router.post('/similarity', response_model = Dict[str, float])
+async def testSimilarity(first: str, second: str) -> dict:
     '''
     This function tests the similarity between two sentences
 
@@ -18,7 +23,7 @@ async def testSimilarity(first: str, second: str):
 
     returns the cosine similarity of these functions
     '''
-    nltk.download('stopwords')
+
     cleaned_sentences = cleanSentences([first, second])
 
     tfidfvectoriser = TfidfVectorizer(max_features=64)
@@ -29,18 +34,17 @@ async def testSimilarity(first: str, second: str):
 
     return {'Cosine Similarity': pairwise_similarities[0][1]}
 
-def cleanSentences(sentences: list):
+def cleanSentences(sentences: List[str]) -> np.array:
     '''
     This function removes stopwords and punctuation from a list of sentences, then turns that
-    list into a pandas series.
+    list into a numpy array.
 
     sentences: A list of strings to be cleaned
 
     returns a new list of sentences
     '''
-
     stop_words = stopwords.words('english')
 
-    return pd.Series([" ".join(re.sub(r'[^a-zA-Z]',' ', word).lower() for word in sentence.split() 
+    return np.array([" ".join(re.sub(r'[^a-zA-Z]',' ', word).lower() for word in sentence.split() 
                             if re.sub(r'[^a-zA-Z]',' ', word).lower() not in stop_words)
                             for sentence in sentences])
