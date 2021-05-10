@@ -7,9 +7,11 @@ name = "pypi"
 fastapi = "*"
 fastapi-utils = "*"
 uvicorn = {extras = ["standard"], version = "*"}
-numpy = "*"
 nltk = "*"
-sklearn = "*"
+setuptools = "*"
+wheel = "*"
+spacy = "*"
+numpy = "*"
 
 [dev-packages]
 
